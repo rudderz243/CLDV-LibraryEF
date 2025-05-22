@@ -1,0 +1,61 @@
+﻿@model IEnumerable<LibraryICE.Models.Loan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@using (Html.BeginForm("Index", "Loans", FormMethod.Get))
+{
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="bookFilter">Search by Book</label>
+            @Html.DropDownList("bookFilter", (SelectList)ViewBag.BookOptions, "All Books", new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-3">
+            <label for="startDate">Start Date+Time</label>
+            <input type="datetime-local" class="form-control" id="startDate" name="startDate" value="@ViewBag.StartDate" />
+        </div>
+        <div class="form-group col-md-3">
+            <label for="endDate">End Date+Time</label>
+            <input type="datetime-local" class="form-control" id="endDate" name="endDate" value="@ViewBag.EndDate" />
+        </div>
+        <div class="form-group col-md-3">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-danger">Reset</a>
+        </div>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BookID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoanDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LoanID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LoanID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LoanID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
