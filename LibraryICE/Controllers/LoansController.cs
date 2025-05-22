@@ -21,16 +21,28 @@ namespace LibraryICE.Controllers
         // GET: Loans
         public async Task<IActionResult> Index(string bookFilter, string startDate, string endDate)
         {
+            // get lists of book and loans to use
             var loans = await _context.Loan.ToListAsync();
             var books = await _context.Book.ToListAsync();
 
+            // we create a new selectlist, pass it to the viewbag, so our dropdownlist can have values
             ViewBag.BookOptions = new SelectList(books, "BookID", "Title");
 
+            // if the user selected a book from the dropdown, check for all loans that are for that book, and return a list
             if (!String.IsNullOrEmpty(bookFilter))
             {
                 loans = loans.Where(s => s.BookID.ToString() == bookFilter).ToList();
             }
 
+            // if the user has entered a start AND an end date, then check for all loans that fall between these values
+            if (!String.IsNullOrEmpty(startDate) && !String.IsNullOrEmpty(endDate))
+            {
+                // convert to datetimes instead of strings, because the database stores in a datetime format
+                DateTime start = DateTime.Parse(startDate);
+                DateTime end = DateTime.Parse(endDate);
+                // we use LINQ again, to check if the loan date is smaller than the start date, and bigger than the end date
+                loans = loans.Where(s => s.LoanDate >= start && s.LoanDate <= end).ToList();
+            }
 
             return View(loans);
         }

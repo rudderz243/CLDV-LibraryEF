@@ -10,7 +10,7 @@ namespace LibraryICE.Models
         [Required] public string? Author { get; set; }
         [Required] public string? ISBN { get; set; }
         [Required] public int TypeID { get; set; }
-
+        [NotMapped] public bool Available { get; set; }
         // public BookType? BookType { get; set; }
     }
 }

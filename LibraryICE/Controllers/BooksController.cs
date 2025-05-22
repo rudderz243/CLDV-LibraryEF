@@ -25,6 +25,14 @@ namespace LibraryICE.Controllers
             // loaded all the books and types int lists so that we can pass them to the page
             var books = await _context.Book.ToListAsync();
             var types = await _context.BookType.ToListAsync();
+            var loans = await _context.Loan.ToListAsync();
+
+            // check whether a book is available, set its availability using linq, checking the availability by seeing if any loans exist for that bookid
+            foreach (var book in books)
+            {
+                // for each and every book, check if any loans exist that match its bookID
+                book.Available = !loans.Any(s => s.BookID == book.BookID);
+            }
 
             // created a list of "types" so that we can feed it to the dropdown menu
             ViewBag.TypeOptions = new SelectList(types, "TypeID", "Type");
@@ -36,10 +44,13 @@ namespace LibraryICE.Controllers
                 books = books.Where(s => s.Title.Contains(nameFilter)).ToList();
             }
 
+            // checking whether a user a selected a type from the dropdown, and if they have, filter the list by that typeID
             if (!String.IsNullOrEmpty(typeFilter))
             {
                 books = books.Where(s => s.TypeID.ToString() == typeFilter).ToList();
             }
+
+
 
 
             return View(books);

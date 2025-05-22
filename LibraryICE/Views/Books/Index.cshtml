@@ -44,6 +44,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.TypeID)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Available)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -61,6 +64,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TypeID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Available)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.BookID">Edit</a> |
