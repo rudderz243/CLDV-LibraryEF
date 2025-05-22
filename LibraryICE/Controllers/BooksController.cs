@@ -19,15 +19,20 @@ namespace LibraryICE.Controllers
         }
 
         // GET: Books
+        // added 2 new parameters, so that we can filter by name and type
         public async Task<IActionResult> Index(string nameFilter, string typeFilter)
         {
+            // loaded all the books and types int lists so that we can pass them to the page
             var books = await _context.Book.ToListAsync();
             var types = await _context.BookType.ToListAsync();
 
+            // created a list of "types" so that we can feed it to the dropdown menu
             ViewBag.TypeOptions = new SelectList(types, "TypeID", "Type");
 
+            // we check if the user actually entered anything in the name filter
             if (!String.IsNullOrEmpty(nameFilter))
             {
+                // use LINQ (which is kinda like SQL in c#) to filter the list
                 books = books.Where(s => s.Title.Contains(nameFilter)).ToList();
             }
 
